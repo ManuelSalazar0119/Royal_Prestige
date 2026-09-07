@@ -1,0 +1,57 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Ezequiel",
+      "relationship": "",
+      "phone": "",
+      "occupation": "",
+      "maritalStatus": "",
+      "origin": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": 2,
+      "name": "Guadalupe",
+      "relationship": "",
+      "phone": "",
+      "occupation": "",
+      "maritalStatus": "",
+      "origin": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": 3,
+      "name": "Ayme Veronica",
+      "relationship": "",
+      "phone": "",
+      "occupation": "",
+      "maritalStatus": "",
+      "origin": "",
+      "status": "Pendiente"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "contactId": 1,
+      "type": "Cita Regular",
+      "dateTime": "2026-09-07T13:00",
+      "notes": "Vistas de la Cantera"
+    },
+    {
+      "id": 2,
+      "contactId": 2,
+      "type": "Cita Regular",
+      "dateTime": "2026-09-09T16:00",
+      "notes": "Nayarit y Yesca"
+    },
+    {
+      "id": 3,
+      "contactId": 3,
+      "type": "Entrevista",
+      "dateTime": "2026-09-07T10:30",
+      "notes": ""
+    }
+  ]
+}

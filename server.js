@@ -32,7 +32,8 @@ app.use('/api', apiRoutes);
 const frontendDist = path.join(__dirname, 'frontend/dist');
 app.use(express.static(frontendDist));
 
-app.get('*', (req, res) => {
+// Catch-all compatible con Express 5
+app.use((req, res) => {
     if (!req.path.startsWith('/api')) {
         const indexPath = path.join(frontendDist, 'index.html');
         res.sendFile(indexPath, (err) => {
