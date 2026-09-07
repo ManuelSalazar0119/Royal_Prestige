@@ -34,6 +34,22 @@ function createTables() {
             notes TEXT,
             FOREIGN KEY(contactId) REFERENCES contacts(id)
         )`);
+        // Poblado inicial si la tabla está vacía
+        db.get("SELECT COUNT(*) as count FROM contacts", (err, row) => {
+            if (!err && row.count === 0) {
+                db.run(`INSERT INTO contacts (name, relationship, phone, occupation, maritalStatus, origin, status) VALUES 
+                    ('Ezequiel', '', '', '', '', '', 'Pendiente'),
+                    ('Guadalupe', '', '', '', '', '', 'Pendiente'),
+                    ('Ayme Veronica', '', '', '', '', '', 'Pendiente')`, function(err) {
+                    if (!err) {
+                        db.run(`INSERT INTO events (contactId, type, dateTime, notes) VALUES 
+                            (1, 'Cita Regular', '2026-09-07T13:00', 'Vistas de la Cantera'),
+                            (2, 'Cita Regular', '2026-09-09T16:00', 'Nayarit y Yesca'),
+                            (3, 'Entrevista', '2026-09-07T10:30', '')`);
+                    }
+                });
+            }
+        });
     });
 }
 
