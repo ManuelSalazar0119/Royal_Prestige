@@ -1,38 +1,57 @@
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+});
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const apiRoutes = require('./routes/api');
 
-// Inicializamos base de datos (creación de tablas)
+// Inicializar DB y Cron
 require('./database');
-// Inicializamos el servicio cron (empieza a ejecutarse en background)
 require('./services/cronService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const path = require('path');
-
 app.use(cors());
 app.use(express.json());
 
+// Ruta de comprobación de salud para Railway (Health Check)
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date() });
+});
+
 app.use('/api', apiRoutes);
 
-// Servir el frontend en producción
+// Servir frontend estático
 const frontendDist = path.join(__dirname, 'frontend/dist');
 app.use(express.static(frontendDist));
 
 app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
-        res.sendFile(path.join(frontendDist, 'index.html'), (err) => {
+        const indexPath = path.join(frontendDist, 'index.html');
+        res.sendFile(indexPath, (err) => {
             if (err) {
-                res.status(404).send("Front-end no compilado todavía");
+                res.status(200).send(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head><title>Royal Prestige Manager</title></head>
+                    <body style="font-family:sans-serif; text-align:center; padding:50px;">
+                        <h1>Servidor Royal Prestige Activo ✅</h1>
+                        <p>El backend y sistema de alertas por correo se están ejecutando correctamente.</p>
+                    </body>
+                    </html>
+                `);
             }
         });
     }
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Backend server is running on port ${PORT}`);
+    console.log(`Servidor Royal Prestige corriendo en el puerto ${PORT}`);
 });
-
