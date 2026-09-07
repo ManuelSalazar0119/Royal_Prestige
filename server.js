@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/api', apiRoutes);
 
 // Servir el frontend en producción
-const frontendDist = path.join(__dirname, '../frontend/dist');
+const frontendDist = path.join(__dirname, 'frontend/dist');
 app.use(express.static(frontendDist));
 
 app.get('*', (req, res) => {
