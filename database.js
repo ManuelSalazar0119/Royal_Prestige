@@ -64,6 +64,29 @@ module.exports = {
         saveData(currentData);
         return newContact;
     },
+    updateContact: (id, contactData) => {
+        const index = currentData.contacts.findIndex(c => Number(c.id) === Number(id));
+        if (index !== -1) {
+            currentData.contacts[index] = {
+                ...currentData.contacts[index],
+                name: contactData.name !== undefined ? contactData.name : currentData.contacts[index].name,
+                relationship: contactData.relationship !== undefined ? contactData.relationship : currentData.contacts[index].relationship,
+                phone: contactData.phone !== undefined ? contactData.phone : currentData.contacts[index].phone,
+                occupation: contactData.occupation !== undefined ? contactData.occupation : currentData.contacts[index].occupation,
+                maritalStatus: contactData.maritalStatus !== undefined ? contactData.maritalStatus : currentData.contacts[index].maritalStatus,
+                origin: contactData.origin !== undefined ? contactData.origin : currentData.contacts[index].origin,
+                status: contactData.status !== undefined ? contactData.status : currentData.contacts[index].status
+            };
+            saveData(currentData);
+            return currentData.contacts[index];
+        }
+        return null;
+    },
+    deleteContact: (id) => {
+        currentData.contacts = currentData.contacts.filter(c => Number(c.id) !== Number(id));
+        saveData(currentData);
+        return { success: true };
+    },
     getEvents: () => {
         return currentData.events.map(e => {
             const contact = currentData.contacts.find(c => Number(c.id) === Number(e.contactId));

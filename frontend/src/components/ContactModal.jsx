@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { X } from 'lucide-react';
 
-const ContactModal = ({ onClose, onSave }) => {
+const ContactModal = ({ contactToEdit, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     name: '',
     relationship: '',
@@ -13,6 +13,20 @@ const ContactModal = ({ onClose, onSave }) => {
     status: 'Pendiente'
   });
 
+  useEffect(() => {
+    if (contactToEdit) {
+      setFormData({
+        name: contactToEdit.name || '',
+        relationship: contactToEdit.relationship || '',
+        phone: contactToEdit.phone || '',
+        occupation: contactToEdit.occupation || '',
+        maritalStatus: contactToEdit.maritalStatus || '',
+        origin: contactToEdit.origin || '',
+        status: contactToEdit.status || 'Pendiente'
+      });
+    }
+  }, [contactToEdit]);
+
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
@@ -20,11 +34,15 @@ const ContactModal = ({ onClose, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/contacts', formData);
+      if (contactToEdit) {
+        await api.put(`/contacts/${contactToEdit.id}`, formData);
+      } else {
+        await api.post('/contacts', formData);
+      }
       onSave();
     } catch (error) {
       console.error('Error saving contact:', error);
-      alert('Error guardando el contacto');
+      alert('Error guardando los cambios del contacto');
     }
   };
 
@@ -32,7 +50,7 @@ const ContactModal = ({ onClose, onSave }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">Nuevo Contacto Crystone</h2>
+          <h2 className="modal-title">{contactToEdit ? 'Editar Contacto' : 'Nuevo Contacto Crystone'}</h2>
           <button className="close-btn" onClick={onClose}><X size={24} /></button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -82,7 +100,7 @@ const ContactModal = ({ onClose, onSave }) => {
           </div>
           <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-            <button type="submit" className="btn">Guardar Contacto</button>
+            <button type="submit" className="btn">{contactToEdit ? 'Actualizar Cambios' : 'Guardar Contacto'}</button>
           </div>
         </form>
       </div>

@@ -13,6 +13,20 @@ router.post('/contacts', (req, res) => {
     res.json(newContact);
 });
 
+router.put('/contacts/:id', (req, res) => {
+    const updated = db.updateContact(req.params.id, req.body);
+    if (updated) {
+        res.json(updated);
+    } else {
+        res.status(404).json({ error: 'Contacto no encontrado' });
+    }
+});
+
+router.delete('/contacts/:id', (req, res) => {
+    const result = db.deleteContact(req.params.id);
+    res.json(result);
+});
+
 // --- EVENTS ---
 router.get('/events', (req, res) => {
     res.json(db.getEvents());
