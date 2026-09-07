@@ -4,29 +4,38 @@ const db = require('../database');
 const { exportToExcel } = require('../services/excelService');
 
 // --- CONTACTS ---
-
-// GET /api/contacts
 router.get('/contacts', (req, res) => {
     res.json(db.getContacts());
 });
 
-// POST /api/contacts
 router.post('/contacts', (req, res) => {
     const newContact = db.addContact(req.body);
     res.json(newContact);
 });
 
 // --- EVENTS ---
-
-// GET /api/events
 router.get('/events', (req, res) => {
     res.json(db.getEvents());
 });
 
-// POST /api/events
 router.post('/events', (req, res) => {
     const newEvent = db.addEvent(req.body);
     res.json(newEvent);
+});
+
+// --- FOLLOWUPS (SEGUIMIENTO) ---
+router.get('/followups', (req, res) => {
+    res.json(db.getFollowups());
+});
+
+router.post('/followups', (req, res) => {
+    const newFollowup = db.addFollowup(req.body);
+    res.json(newFollowup);
+});
+
+router.put('/followups/:id', (req, res) => {
+    const updated = db.updateFollowupStage(req.params.id, req.body.stage);
+    res.json(updated);
 });
 
 // --- EXPORT EXCEL ---
@@ -37,12 +46,14 @@ router.get('/stats', (req, res) => {
     const today = new Date().toISOString().split('T')[0];
     const contacts = db.getContacts();
     const events = db.getEvents();
+    const followups = db.getFollowups();
 
     const citasHoy = events.filter(e => e.type === 'Cita Regular' && e.dateTime.includes(today)).length;
     const entrevistasSemana = events.filter(e => e.type === 'Entrevista' && e.dateTime >= today).length;
     const totalContactos = contacts.length;
+    const seguimientosActivos = followups.filter(f => f.stage !== 'Cierre Exitoso' && f.stage !== 'Archivado').length;
 
-    res.json({ citasHoy, entrevistasSemana, totalContactos });
+    res.json({ citasHoy, entrevistasSemana, totalContactos, seguimientosActivos });
 });
 
 module.exports = router;

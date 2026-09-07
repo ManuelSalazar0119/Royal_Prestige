@@ -22,17 +22,29 @@ const exportToExcel = (req, res) => {
             'Notas': e.notes
         }));
 
+        const followups = db.getFollowups().map(f => ({
+            'ID': f.id,
+            'Contacto': f.contactName,
+            'Etapa': f.stage,
+            'Prioridad': f.priority,
+            'Próxima Acción': f.nextActionDate,
+            'Notas de Seguimiento': f.notes
+        }));
+
         const wb = xlsx.utils.book_new();
 
         const wsContacts = xlsx.utils.json_to_sheet(contacts);
         xlsx.utils.book_append_sheet(wb, wsContacts, "Contactos");
 
         const wsEvents = xlsx.utils.json_to_sheet(events);
-        xlsx.utils.book_append_sheet(wb, wsEvents, "Eventos");
+        xlsx.utils.book_append_sheet(wb, wsEvents, "Citas y Entrevistas");
+
+        const wsFollowups = xlsx.utils.json_to_sheet(followups);
+        xlsx.utils.book_append_sheet(wb, wsFollowups, "Seguimiento Crystone");
 
         const buffer = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
-        res.setHeader('Content-Disposition', 'attachment; filename="Exportacion_Royal_Prestige.xlsx"');
+        res.setHeader('Content-Disposition', 'attachment; filename="Exportacion_Crystone.xlsx"');
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(buffer);
     } catch (err) {

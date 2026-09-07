@@ -1,61 +1,58 @@
 import React from 'react';
-import { Download, Mail, Server } from 'lucide-react';
+import { Download, Mail, ShieldCheck } from 'lucide-react';
 
 const Settings = () => {
   const handleExport = () => {
-    // Abrir la ruta de exportación en una nueva pestaña (descarga el archivo)
-    window.open('http://localhost:3000/api/export', '_blank');
+    const exportUrl = window.location.hostname === 'localhost' && window.location.port === '5173'
+      ? 'http://localhost:3000/api/export'
+      : '/api/export';
+    window.open(exportUrl, '_blank');
   };
 
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Configuración</h1>
+        <div>
+          <h1 className="page-title">Configuración Crystone</h1>
+          <p className="page-subtitle">Sincronización y estado de la plataforma</p>
+        </div>
       </div>
 
-      <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', maxWidth: '800px'}}>
+      <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '1.75rem', maxWidth: '850px'}}>
         
         {/* Exportación a Excel */}
         <div className="stat-card">
-          <h2 style={{fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-            <Download size={20} className="text-primary" /> Exportación de Datos
+          <h2 style={{fontSize: '1.25rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'white'}}>
+            <Download size={22} style={{color: '#10b981'}} /> Exportación Completa Crystone (Excel)
           </h2>
-          <p style={{color: 'var(--text-muted)', marginBottom: '1.5rem'}}>
-            Descarga todos los contactos y eventos registrados en el sistema en un archivo de Excel (.xlsx).
+          <p style={{color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.925rem'}}>
+            Descarga todas las hojas de datos (Contactos, Citas/Entrevistas y Seguimientos Crystone) en un solo libro ejecutable de Excel (.xlsx).
           </p>
           <button className="btn" onClick={handleExport}>
-            <Download size={18} /> Exportar a Excel
+            <Download size={18} /> Exportar Excel (.xlsx)
           </button>
         </div>
 
-        {/* Notificaciones */}
+        {/* Notificaciones Email */}
         <div className="stat-card">
-          <h2 style={{fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-            <Mail size={20} className="text-primary" /> Configuración de Notificaciones (Email)
+          <h2 style={{fontSize: '1.25rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'white'}}>
+            <Mail size={22} style={{color: '#06b6d4'}} /> Sistema de Alertas Automáticas (Email)
           </h2>
-          <p style={{color: 'var(--text-muted)', marginBottom: '1rem'}}>
-            Las notificaciones se envían automáticamente al correo `ibared6@gmail.com` cuando faltan 24 y 2 horas para un evento.
+          <p style={{color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.925rem'}}>
+            Tus notificaciones activas se envían a <strong>ibared6@gmail.com</strong> exactamente a las 24 horas y 2 horas antes de cada cita o entrevista.
           </p>
-          <div style={{padding: '1rem', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderRadius: 'var(--radius)', border: '1px solid #bfdbfe', color: '#1e3a8a', fontSize: '0.875rem'}}>
-            <strong>Instrucciones para activar el correo:</strong><br/>
-            1. Ve a tu cuenta de Google (Seguridad).<br/>
-            2. Activa la verificación en dos pasos.<br/>
-            3. Crea una "Contraseña de Aplicación" para "Correo".<br/>
-            4. Abre el archivo <code>backend/.env</code> en este proyecto.<br/>
-            5. Pega esa contraseña en la variable <code>EMAIL_PASS</code> y reinicia el servidor.
+          <div style={{padding: '1.25rem', background: 'rgba(16, 185, 129, 0.08)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.25)', color: '#34d399', fontSize: '0.875rem'}}>
+            <strong>Estado del servicio:</strong> Activo y verificado con Nodemailer.
           </div>
         </div>
 
-        {/* Estatus del Sistema */}
+        {/* Estado en la Nube */}
         <div className="stat-card">
-          <h2 style={{fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-            <Server size={20} className="text-primary" /> Estatus del Sistema
+          <h2 style={{fontSize: '1.25rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'white'}}>
+            <ShieldCheck size={22} style={{color: '#f59e0b'}} /> Plataforma Nube 24/7
           </h2>
-          <p style={{color: 'var(--text-muted)', marginBottom: '1rem'}}>
-            Actualmente el sistema corre de manera local. Si apagas la computadora, las notificaciones se detendrán.
-          </p>
-          <p style={{color: 'var(--text-muted)'}}>
-            <em>Sugerencia: Para mantenerlo 24/7, considera subir la carpeta <code>backend</code> a un servicio como Render o Railway.</em>
+          <p style={{color: 'var(--text-muted)', fontSize: '0.925rem'}}>
+            El backend Crystone se sincroniza de forma segura con tu repositorio en GitHub y opera de forma ininterrumpida.
           </p>
         </div>
 

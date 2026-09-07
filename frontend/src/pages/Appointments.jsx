@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { CalendarDays, Plus, List } from 'lucide-react';
 import EventModal from '../components/EventModal';
 
 const Appointments = () => {
   const [events, setEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState('list'); // 'list' o 'calendar' (simplificado)
+  const [viewMode, setViewMode] = useState('list');
 
   useEffect(() => {
     fetchEvents();
@@ -14,7 +14,7 @@ const Appointments = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/events');
+      const res = await api.get('/events');
       setEvents(res.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -28,7 +28,10 @@ const Appointments = () => {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Gestor de Citas y Entrevistas</h1>
+        <div>
+          <h1 className="page-title">Gestor de Citas y Entrevistas</h1>
+          <p className="page-subtitle">Agenda ejecutiva de reuniones Crystone</p>
+        </div>
         <button className="btn" onClick={() => setIsModalOpen(true)}>
           <Plus size={18} /> Agendar Evento
         </button>
@@ -39,7 +42,7 @@ const Appointments = () => {
           <List size={18} /> Lista
         </button>
         <button className={viewMode === 'calendar' ? 'btn' : 'btn btn-secondary'} onClick={() => setViewMode('calendar')}>
-          <CalendarDays size={18} /> Calendario (Resumen)
+          <CalendarDays size={18} /> Vista General
         </button>
       </div>
 
@@ -49,22 +52,22 @@ const Appointments = () => {
             <tr>
               <th>ID</th>
               <th>Contacto</th>
-              <th>Tipo</th>
+              <th>Tipo de Evento</th>
               <th>Fecha y Hora</th>
-              <th>Notas</th>
+              <th>Notas adicionales</th>
             </tr>
           </thead>
           <tbody>
             {events.length === 0 ? (
-              <tr><td colSpan="5" style={{textAlign: 'center', color: 'var(--text-muted)'}}>No hay eventos registrados</td></tr>
+              <tr><td colSpan="5" style={{textAlign: 'center', color: 'var(--text-muted)', padding: '2rem'}}>No hay eventos registrados</td></tr>
             ) : (
               events.map(event => (
                 <tr key={event.id}>
-                  <td style={{color: 'var(--text-muted)'}}>#{event.id.toString().padStart(4, '0')}</td>
-                  <td style={{fontWeight: 500}}>{event.contactName}</td>
+                  <td style={{color: 'var(--text-dim)', fontWeight: 600}}>#{event.id.toString().padStart(4, '0')}</td>
+                  <td style={{fontWeight: 600, color: 'white'}}>{event.contactName}</td>
                   <td><span className={getBadgeClass(event.type)}>{event.type}</span></td>
-                  <td>{new Date(event.dateTime).toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' })}</td>
-                  <td>{event.notes || '-'}</td>
+                  <td style={{color: '#cbd5e1'}}>{new Date(event.dateTime).toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' })}</td>
+                  <td style={{color: 'var(--text-muted)'}}>{event.notes || '-'}</td>
                 </tr>
               ))
             )}

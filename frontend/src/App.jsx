@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Directory from './pages/Directory';
 import Appointments from './pages/Appointments';
+import Tracking from './pages/Tracking';
 import Settings from './pages/Settings';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/directory" element={<Directory />} />
           <Route path="/appointments" element={<Appointments />} />
+          <Route path="/tracking" element={<Tracking />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { X } from 'lucide-react';
 
 const ContactModal = ({ onClose, onSave }) => {
@@ -20,7 +20,7 @@ const ContactModal = ({ onClose, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/contacts', formData);
+      await api.post('/contacts', formData);
       onSave();
     } catch (error) {
       console.error('Error saving contact:', error);
@@ -32,7 +32,7 @@ const ContactModal = ({ onClose, onSave }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">Nuevo Contacto</h2>
+          <h2 className="modal-title">Nuevo Contacto Crystone</h2>
           <button className="close-btn" onClick={onClose}><X size={24} /></button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -82,7 +82,7 @@ const ContactModal = ({ onClose, onSave }) => {
           </div>
           <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-            <button type="submit" className="btn">Guardar</button>
+            <button type="submit" className="btn">Guardar Contacto</button>
           </div>
         </form>
       </div>
